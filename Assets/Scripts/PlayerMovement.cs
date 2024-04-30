@@ -7,24 +7,32 @@ public class PlayerMovement : MonoBehaviour
     private float speed = 8f;
     [SerializeField]
     private float jumpingPower = 5f;
+    //public Vector3 jump;
+    private float ySpeed;
     private bool isFacingRight = true;
+    public bool isGrounded;
 
-    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Rigidbody rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+
 
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
+        //jump = new Vector3(0.0f, 2.0f, 0.0f);
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+
+        if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            rb.velocity = new Vector3(rb.velocity.x, jumpingPower, 0);
+            isGrounded = false;
         }
 
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y * 0.5f, 0);
+            isGrounded = false;
         }
 
         Flip();
@@ -32,12 +40,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        rb.velocity = new Vector3(horizontal * speed, rb.velocity.y, 0);
     }
 
-    private bool IsGrounded()
+    void OnCollisionStay()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        isGrounded = true;
     }
 
     private void Flip()
