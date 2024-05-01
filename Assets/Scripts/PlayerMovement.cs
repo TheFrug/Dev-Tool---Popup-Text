@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float jumpingPower = 5f;
     //public Vector3 jump;
-    private float ySpeed;
     private bool isFacingRight = true;
     public bool isGrounded;
 
